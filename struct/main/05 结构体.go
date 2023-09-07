@@ -41,4 +41,25 @@ func main() {
 		return
 	}
 	fmt.Println(string(jsonData))
+
+	// 接口
+	var animal struct_pkg.Animal
+	animal = struct_pkg.Chicken{
+		Name: "蔡徐坤",
+	}
+	animal.Sing()
+	animal.Jump()
+	animal.Rap()
+
+	struct_pkg.NullInterface(100)
+	struct_pkg.NullInterface("一百")
+	arr := [5]int{1, 2, 3, 4, 5}
+	struct_pkg.NullInterface(arr)
+	map1 := make(map[string]string, 1)
+	map1["name"] = "han123"
+	struct_pkg.NullInterface(map1)
+	struct_pkg.NullInterface(true)
+	struct_pkg.NullInterface(false)
+	struct_pkg.NullInterface(10.1)
+	struct_pkg.NullInterface(nil)
 }
