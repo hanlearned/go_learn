@@ -15,22 +15,50 @@ type Students struct {
 	Class     string
 }
 
-func main() {
+func dbConnect() *gorm.DB {
 	dsn := "root:qwer1234@tcp(47.93.116.220:3306)/gotest?charset=utf8mb4&parseTime=True&loc=Local"
 	var connect = mysql.Open(dsn)
 	db, err := gorm.Open(connect, &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
 	}
-	// 插入一条数据
-	//stu := &Students{7, "han234", "男", 20, "class B"}
-	//db.Create(&stu)
-	//db.Commit()
+	return db
+}
 
-	// 获取所有数据
+// 增
+func insertData(db *gorm.DB) {
+	// 插入一条数据
+	stu := &Students{7, "han234", "男", 20, "class B"}
+	db.Create(&stu)
+	db.Commit()
+}
+
+// 删
+func deleteData(db *gorm.DB) {
+	var firstStudent Students
+	db.First(&firstStudent) // select * from students order by student_id limit 1
+	db.Delete(&firstStudent)
+}
+
+// 改
+func updateData(db *gorm.DB) {
+	var student Students
+	db.Take(&student)
+	student.Name = "韩学成"
+	student.Gender = "Female"
+	student.Age = 25
+	db.Save(&student)
+}
+
+func findAll(db *gorm.DB) {
+	// 获取所有数据 把结果返回 allStudents 变量中
 	var allStudents []Students
 	db.Find(&allStudents) // select * from students
 	fmt.Println(allStudents)
+}
+
+// 查
+func findData(db *gorm.DB) {
 
 	// 获取第一条数据
 	var firstStudent Students
@@ -56,5 +84,13 @@ func main() {
 	var whereStudent []Students
 	db.Where("name = ?", "Alice").Find(&whereStudent)
 	fmt.Println(whereStudent)
+}
 
+func main() {
+	db := dbConnect()
+	//findData(db)
+	updateData(db)
+	findAll(db)
+	deleteData(db)
+	findAll(db)
 }
